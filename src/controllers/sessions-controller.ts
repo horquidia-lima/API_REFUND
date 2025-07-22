@@ -1,8 +1,15 @@
 import { Request, Response } from "express"
+import {z} from "zod"
 
 class SessionsController {
     async create(request: Request, response: Response) {
-        response.json({message: "Login realizado com sucesso."})
+        const bodySchema = z.object({
+            email: z.string().email({message: "Invalid email."}),
+            password: z.string(),
+        })
+
+        const { email, password } = bodySchema.parse(request.body);
+        response.json({email, password})
     }
 }
 
